@@ -1,0 +1,23 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int solve(vector<vector<int>>&cost){
+    int n=cost.size();
+    int N=1<<n;
+    vector<int> dp(N,INT_MAX);
+    dp[0]=0;
+
+    for(int mask=0; mask<N; mask++){
+        int worker=__builtin_popcount(mask);
+        if(worker>=n) continue;
+
+        for(int task=0; task<n; task++){
+            if(!(mask&(1<<task))){
+                int next=mask|(1<<task);
+                dp[next]=min(dp[next],
+                             dp[mask]+cost[worker][task]);
+            }
+        }
+    }
+    return dp[N-1];
+}
